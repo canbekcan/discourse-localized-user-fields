@@ -1,0 +1,6 @@
+en:
+  js:
+    bekcan:
+      user_fields:
+        name: "Name"
+        description: "Description"

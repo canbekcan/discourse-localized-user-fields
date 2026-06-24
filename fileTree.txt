@@ -1,0 +1,18 @@
+discourse-bekcan-localized-user-fields/
+├── about.json
+├── plugin.rb
+├── config/
+│   ├── settings.yml
+│   └── locales/
+│       ├── client.en.yml
+│       ├── client.tr.yml
+│       ├── server.en.yml
+│       └── server.tr.yml
+├── assets/
+│   └── javascripts/
+│       └── discourse/
+│           └── api-initializers/
+│               └── localized-user-fields.js
+└── lib/
+    └── localized_user_fields/
+        └── engine.rb

@@ -1,0 +1,6 @@
+tr:
+  js:
+    bekcan:
+      user_fields:
+        name: "İsim"
+        description: "Açıklama"
