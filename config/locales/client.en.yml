@@ -2,5 +2,25 @@ en:
   js:
     bekcan:
       user_fields:
-        name: "Name"
-        description: "Description"
+        academic_title:
+          name: "Academic Title"
+          description: "Select your academic title from the list."
+          options:
+            - "Prof. Dr."
+            - "Assoc. Prof. Dr."
+            - "Dr. Lecturer"
+            - "Research Assistant"
+            - "Independent Researcher"
+        affiliation:
+          name: "Affiliation / Institution"
+          description: "Name of the university, institute, or organization you belong to."
+        orcid_id:
+          name: "ORCID iD"
+          description: "Your unique 16-digit researcher identifier."
+  site_settings:
+    localized_user_fields_enabled: "Enable Bekcan Localized User Fields"
+  bekcan:
+    institutions:
+      "emu.edu.tr": "Eastern Mediterranean University"
+      "boun.edu.tr": "Boğaziçi University"
+      "metu.edu.tr": "Middle East Technical University"

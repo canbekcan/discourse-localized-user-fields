@@ -2,5 +2,25 @@ tr:
   js:
     bekcan:
       user_fields:
-        name: "İsim"
-        description: "Açıklama"
+        academic_title:
+          name: "Akademik Unvan"
+          description: "Listeden akademik unvanınızı seçiniz."
+          options:
+            - "Prof. Dr."
+            - "Doç. Dr."
+            - "Dr. Öğr. Üyesi"
+            - "Araştırma Görevlisi"
+            - "Bağımsız Araştırmacı"
+        affiliation:
+          name: "Kurum / Üniversite"
+          description: "Bağlı olduğunuz üniversite, enstitü veya kurumun adı."
+        orcid_id:
+          name: "ORCID iD"
+          description: "Benzersiz 16 haneli araştırmacı kimliğiniz."
+  site_settings:
+    localized_user_fields_enabled: "Bekcan Yerelleştirilmiş Kullanıcı Alanlarını Etkinleştir"
+  bekcan:
+    institutions:
+      "emu.edu.tr": "Doğu Akdeniz Üniversitesi"
+      "boun.edu.tr": "Boğaziçi Üniversitesi"
+      "metu.edu.tr": "Orta Doğu Teknik Üniversitesi"
