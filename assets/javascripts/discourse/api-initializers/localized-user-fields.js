@@ -1,5 +1,4 @@
 import { apiInitializer } from "discourse/lib/api";
-import I18n from "discourse-i18n";
 
 export default apiInitializer("1.8.0", (api) => {
   const siteSettings = api.container.lookup("service:site-settings");
@@ -7,18 +6,19 @@ export default apiInitializer("1.8.0", (api) => {
     return;
   }
 
-  // Model override yerine sadece serializer çıktısı veya DOM element düzeyinde etiket düzenlemesi
-  api.decorateWidget?.("user-field:after", (helper) => {
-    const field = helper.attrs?.field;
-    if (!field?.name) {
-      return;
-    }
-
-    const key = field.name.toLowerCase().replace(/[^a-z0-9]+/g, "_").replace(/^_+|_+$/g, "");
-    const translatedName = I18n.t(`bekcan.user_fields.${key}.name`, { defaultValue: "" });
-
-    if (translatedName) {
-      field.name = translatedName;
+  // Profil düzenleme ekranı açıldığında Affiliation kutusunu kilitler
+  api.onPageChange((url) => {
+    if (url.includes("/preferences/profile")) {
+      setTimeout(() => {
+        const affiliationInput = document.querySelector(
+          ".user-field-affiliation input, .user-field-kurum---universite input"
+        );
+        if (affiliationInput) {
+          affiliationInput.setAttribute("readonly", "readonly");
+          affiliationInput.style.backgroundColor = "var(--primary-very-low, #f4f4f4)";
+          affiliationInput.style.cursor = "not-allowed";
+        }
+      }, 300);
     }
   });
 });

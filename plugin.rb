@@ -2,7 +2,7 @@
 
 # name: discourse-localized-user-fields
 # about: Automatic institutional affiliation and multi-language support for user fields
-# version: 3.4.0
+# version: 3.5.0
 # authors: Can Bekcan
 
 enabled_site_setting :localized_user_fields_enabled
@@ -12,7 +12,7 @@ after_initialize do
 
   module ::BekcanAcademicFieldsManager
     def self.sync_fields_and_options!
-      # 1. Academic Title (Dropdown - Düzenlenebilir)
+      # 1. Academic Title (Dropdown)
       title_field = UserField.find_by("LOWER(name) IN (?)", ["academic title", "akademik unvan"])
       unless title_field
         title_field = UserField.create!(
@@ -26,7 +26,7 @@ after_initialize do
         )
       end
 
-      # Dil dosyasından unvanları çekip options tablosuyla tam eşitleme (Two-way sync)
+      # Unvanları dil dosyasından çekip veritabanıyla tam eşitleme
       raw_titles = I18n.t("bekcan.academic_titles", default: [])
       target_titles = raw_titles.is_a?(Array) ? raw_titles.map(&:to_s).reject(&:blank?) : []
 
@@ -34,28 +34,30 @@ after_initialize do
         existing_options = title_field.user_field_options.to_a
         existing_values = existing_options.map(&:value)
 
-        # Yeni eklenenleri DB'ye yaz
         (target_titles - existing_values).each do |val|
           title_field.user_field_options.create!(value: val)
         end
 
-        # Dil dosyasından silinmiş veya değiştirilmiş olanları temizle
         existing_options.each do |opt|
           opt.destroy! unless target_titles.include?(opt.value)
         end
       end
 
-      # 2. Affiliation (Text - Zorunlu ve Kullanıcı Tarafından Değiştirilemez)
+      # 2. Affiliation (Text - Formda görünmesi için editable: true, arka planda kilitli)
       affiliation_field = UserField.find_by("LOWER(name) IN (?)", ["affiliation", "kurum / üniversite"])
       if affiliation_field
-        affiliation_field.update!(editable: false, required: true) if affiliation_field.editable || !affiliation_field.required
+        affiliation_field.update!(
+          editable: true,
+          show_on_profile: true,
+          show_on_user_card: true
+        )
       else
         affiliation_field = UserField.create!(
           name: "Affiliation",
           description: "Institution assigned automatically based on your email domain.",
           field_type: "text",
-          editable: false,
-          required: true,
+          editable: true,
+          required: false,
           show_on_profile: true,
           show_on_user_card: true
         )
@@ -86,7 +88,6 @@ after_initialize do
       institution_name = resolve_institution(primary_email)
       field_key = "user_field_#{field.id}"
 
-      # Domain tanımlıysa kurum adını ata, tanımlı değilse alanı boşalt
       target_value = institution_name.presence || nil
 
       if user.custom_fields[field_key] != target_value
@@ -107,16 +108,19 @@ after_initialize do
     end
   end
 
-  # Sunucu açıldığında / eklenti aktifleştiğinde:
   affiliation_field = ::BekcanAcademicFieldsManager.sync_fields_and_options!
   ::BekcanAcademicFieldsManager.sync_all_existing_users!(affiliation_field)
 
-  # Rutin kullanıcı döngüleri
   on(:user_created) do |user|
     ::BekcanAcademicFieldsManager.update_user_affiliation(user)
   end
 
   on(:user_emails_changed) do |user|
+    ::BekcanAcademicFieldsManager.update_user_affiliation(user)
+  end
+
+  # Kullanıcı profil tercihlerini kaydettiğinde alanı zorla domain kurumuna kilitler
+  on(:user_updated) do |user|
     ::BekcanAcademicFieldsManager.update_user_affiliation(user)
   end
 end
