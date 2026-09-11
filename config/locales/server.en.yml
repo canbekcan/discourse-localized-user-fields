@@ -2,6 +2,12 @@ en:
   site_settings:
     localized_user_fields_enabled: "Enable localized academic user fields"
   bekcan:
+    academic_titles:
+      - "Prof. Dr."
+      - "Assoc. Prof. Dr."
+      - "Dr. Lecturer"
+      - "Research Assistant"
+      - "Independent Researcher"
     institutions:
       "emu.edu.tr": "Eastern Mediterranean University"
       "boun.edu.tr": "Boğaziçi University"

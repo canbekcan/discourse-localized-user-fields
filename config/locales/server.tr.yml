@@ -2,6 +2,13 @@ tr:
   site_settings:
     localized_user_fields_enabled: "Yerelleştirilmiş akademik kullanıcı alanlarını etkinleştir"
   bekcan:
+    academic_titles:
+      - "Prof. Dr."
+      - "Doç. Dr."
+      - "Dr. Öğr. Üyesi"
+      - "Araştırma Görevlisi"
+      - "Öğretim Görevlisi"
+      - "Bağımsız Araştırmacı"
     institutions:
       "emu.edu.tr": "Doğu Akdeniz Üniversitesi"
       "boun.edu.tr": "Boğaziçi Üniversitesi"
