@@ -13,14 +13,7 @@ en:
             - "Independent Researcher"
         affiliation:
           name: "Affiliation / Institution"
-          description: "Name of the university, institute, or organization you belong to."
+          description: "Your institution assigned automatically based on your email domain."
         orcid_id:
           name: "ORCID iD"
           description: "Your unique 16-digit researcher identifier."
-  site_settings:
-    localized_user_fields_enabled: "Enable Bekcan Localized User Fields"
-  bekcan:
-    institutions:
-      "emu.edu.tr": "Eastern Mediterranean University"
-      "boun.edu.tr": "Boğaziçi University"
-      "metu.edu.tr": "Middle East Technical University"

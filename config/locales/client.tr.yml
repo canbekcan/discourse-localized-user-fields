@@ -13,14 +13,7 @@ tr:
             - "Bağımsız Araştırmacı"
         affiliation:
           name: "Kurum / Üniversite"
-          description: "Bağlı olduğunuz üniversite, enstitü veya kurumun adı."
+          description: "E-posta uzantınıza göre otomatik tanımlanan kurumunuz."
         orcid_id:
           name: "ORCID iD"
           description: "Benzersiz 16 haneli araştırmacı kimliğiniz."
-  site_settings:
-    localized_user_fields_enabled: "Bekcan Yerelleştirilmiş Kullanıcı Alanlarını Etkinleştir"
-  bekcan:
-    institutions:
-      "emu.edu.tr": "Doğu Akdeniz Üniversitesi"
-      "boun.edu.tr": "Boğaziçi Üniversitesi"
-      "metu.edu.tr": "Orta Doğu Teknik Üniversitesi"

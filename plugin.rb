@@ -1,59 +1,46 @@
-# name: discourse-localized-user-fields
-# about: Automatic multi-language institutional affiliation based on email domain
-# version: 3.0.0
-# authors: Can Bekcan
-
 # frozen_string_literal: true
 
-enabled_site_setting :localized_user_fields_enabled
+# name: discourse-localized-user-fields
+# about: Automatic institutional affiliation and multi-language support for user fields
+# version: 3.1.0
+# authors: Can Bekcan
 
-require_relative 'lib/localized_user_fields/engine'
+enabled_site_setting :localized_user_fields_enabled
 
 after_initialize do
   next unless SiteSetting.localized_user_fields_enabled
 
-  # Yardımcı metot: Domain'e göre çevrilmiş kurum adını bulur
   module ::BekcanAffiliationHelper
     def self.resolve_for(email)
       return nil if email.blank?
-      domain = email.split('@').last.to_s.downcase
-      
-      # I18n üzerinden mevcut dildeki karşılığını arıyoruz
+
+      domain = email.to_s.split("@").last.to_s.downcase
       translation_key = "bekcan.institutions.#{domain}"
-      translated_name = I18n.t(translation_key, default: '')
-      
-      translated_name.present? ? translated_name : nil
+
+      I18n.t(translation_key, default: "").presence
     end
 
     def self.update_user_affiliation(user)
-      return unless user.present?
-      
-      # 'Affiliation' adlı kullanıcı alanının ID'sini buluyoruz
-      field = UserField.find_by("LOWER(name) = ? OR LOWER(name) = ?", "affiliation", "kurum / üniversite")
-      return unless field.present?
+      return if user.blank?
 
-      primary_email = user.user_emails.find_by(primary: true)&.email || user.email
+      field = UserField.find_by("LOWER(name) IN (?)", ["affiliation", "kurum / üniversite"])
+      return if field.blank?
+
+      primary_email = user.primary_email&.email || user.email
       institution_name = resolve_for(primary_email)
 
-      if institution_name.present?
-        # Kurum otomatik eşleştiyse kullanıcı alanına yazıyoruz
-        custom_fields = user.custom_fields || {}
-        field_key = "user_field_#{field.id}"
-        
-        if custom_fields[field_key] != institution_name
-          user.custom_fields[field_key] = institution_name
-          user.save_custom_fields
-        end
-      end
+      return if institution_name.blank?
+
+      field_key = "user_field_#{field.id}"
+      user.custom_fields[field_key] = institution_name
+      user.save_custom_fields
     end
   end
 
-  # 1. Yeni kullanıcı kaydolduğunda tetiklenir
   on(:user_created) do |user|
     ::BekcanAffiliationHelper.update_user_affiliation(user)
   end
 
-  # 2. Kullanıcı e-postası değiştiğinde tetiklenir
   on(:user_emails_changed) do |user|
     ::BekcanAffiliationHelper.update_user_affiliation(user)
   end

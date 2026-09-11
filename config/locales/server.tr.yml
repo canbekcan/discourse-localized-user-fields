@@ -1,3 +1,8 @@
 tr:
   site_settings:
-    bekcan_localized_user_fields_enabled: "Bekcan Yerelleştirilmiş Kullanıcı Alanları eklentisini etkinleştir"
+    localized_user_fields_enabled: "Yerelleştirilmiş akademik kullanıcı alanlarını etkinleştir"
+  bekcan:
+    institutions:
+      "emu.edu.tr": "Doğu Akdeniz Üniversitesi"
+      "boun.edu.tr": "Boğaziçi Üniversitesi"
+      "metu.edu.tr": "Orta Doğu Teknik Üniversitesi"
