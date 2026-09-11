@@ -1,4 +1,4 @@
 plugins:
-  bekcan_localized_user_fields_enabled:
+  localized_user_fields_enabled:
     default: true
     client: true
